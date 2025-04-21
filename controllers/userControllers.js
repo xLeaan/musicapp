@@ -1,5 +1,7 @@
 const db = require('../conexion/conexion');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const registerUser = async(req, res) => {
   const { email, nombre, apellido, contrasena, rol } = req.body;
@@ -38,10 +40,30 @@ const loginUser = (req, res) => {
       const user = results[0];
       const match = await bcrypt.compare(contrasena, user.contrasena);
       if (!match) return res.status(401).json({ message: 'Contraseña incorrecta', user });
+
+      const token = jwt.sign(
+        {
+            id: user.id,
+            email: user.email,
+            nombre: user.nombre,
+            rol: user.rol
+        },
+        process.env.API_KEY,
+        { expiresIn: '8h' }
+      );
   
-      res.status(200).json({ message: 'Login exitoso', user });
+      res.status(200).json({ 
+        message: 'Login exitoso', 
+        token,
+        user: {
+            id: user.id,
+            email: user.email,
+            nombre: user.nombre,
+            rol: user.rol
+        }
+     });
     });
-  };
+};
 
 module.exports = {
   registerUser,
