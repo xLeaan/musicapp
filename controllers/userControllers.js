@@ -48,7 +48,7 @@ const loginUser = (req, res) => {
             nombre: user.nombre,
             rol: user.rol
         },
-        process.env.API_KEY,
+        process.env.TOKEN_USER,
         { expiresIn: '8h' }
       );
   
