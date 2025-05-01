@@ -2,11 +2,17 @@
 CREATE DATABASE IF NOT EXISTS `rtconfiable` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 USE `rtconfiable`;
 
+CREATE TABLE rol_user(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(30) UNIQUE
+);
+
 CREATE TABLE users(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(50),
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    email VARCHAR(50) UNIQUE,
     nombre VARCHAR(30),
     apellido VARCHAR(30),
     contrasena VARCHAR(100),
-    rol VARCHAR(30)
+    rol_id INT,
+    FOREIGN KEY (rol_id) REFERENCES rol_user(id)
 );

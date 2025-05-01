@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const registerUser = async(req, res) => {
-  const { email, nombre, apellido, contrasena, rol } = req.body;
+  const { email, nombre, apellido, contrasena, rol_id } = req.body;
 
   if (!email || !nombre || !apellido || !contrasena) {
     return res.status(400).json({ message: "Faltan campos" });
@@ -14,8 +14,8 @@ const registerUser = async(req, res) => {
     // contraseña encriptada
     const hashedPassword = await bcrypt.hash(contrasena, 10); 
     
-    const sql = 'INSERT INTO users (email, nombre, apellido, contrasena, rol) VALUES (?, ?, ?, ?, ?)';
-    db.query(sql, [email, nombre, apellido, hashedPassword, rol], (err, result) => {
+    const sql = 'INSERT INTO users (email, nombre, apellido, contrasena, rol_id) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [email, nombre, apellido, hashedPassword, rol_id], (err, result) => {
     
     if (err) {
       console.error('Error al registrar usuario:', err);
@@ -46,7 +46,7 @@ const loginUser = (req, res) => {
             id: user.id,
             email: user.email,
             nombre: user.nombre,
-            rol: user.rol
+            rol_id: user.rol_id
         },
         process.env.TOKEN_USER,
         { expiresIn: '8h' }
@@ -59,7 +59,7 @@ const loginUser = (req, res) => {
             id: user.id,
             email: user.email,
             nombre: user.nombre,
-            rol: user.rol
+            rol_id: user.rol_id
         }
      });
     });
