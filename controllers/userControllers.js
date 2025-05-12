@@ -18,7 +18,7 @@ const registerUser = async(req, res) => {
     db.query(sql, [email, nombre, apellido, hashedPassword, rol_id], (err, result) => {
     
     if (err) {
-      console.error('Error al registrar usuario:', err);
+      // console.error('Error al registrar usuario:', err);
       return res.status(500).json({ message: 'Error al registrar usuario' });
     }
     res.status(201).json({ message: 'Usuario registrado correctamente' });

@@ -7,6 +7,10 @@ CREATE TABLE rol_user(
     nombre VARCHAR(30) UNIQUE
 );
 
+INSERT INTO rol_user (id, nombre) VALUES
+(1, 'user'),
+(2, 'admin');
+
 CREATE TABLE users(
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(50) UNIQUE,
