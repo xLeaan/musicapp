@@ -1,32 +1,46 @@
 -- Script para crear la base de datos y las tablas necesarias para el proyecto
-CREATE DATABASE IF NOT EXISTS `rtconfiable` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-USE `rtconfiable`;
+CREATE DATABASE IF NOT EXISTS `music` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `music`;
 
-CREATE TABLE rol_user(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(30) UNIQUE
-);
-
-INSERT INTO rol_user (id, nombre) VALUES
-(1, 'user'),
-(2, 'admin');
-
-CREATE TABLE rol_user(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre VARCHAR(30) UNIQUE
-);
-
-INSERT INTO rol_user (id, nombre) VALUES
-(1, 'user'),
-(2, 'admin');
-
-CREATE TABLE users(
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE listeners(
+    id_listener INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(30) UNIQUE,
+    full_name VARCHAR(50),
     email VARCHAR(50) UNIQUE,
-    nombre VARCHAR(30),
-    num_documento VARCHAR(30),
-    contrasena VARCHAR(100),
-    celular INT(20),
-    rol_id INT,
-    FOREIGN KEY (rol_id) REFERENCES rol_user(id)
+    password VARCHAR(100)
 );
+
+CREATE TABLE melomaniacs(
+    follower_id INT,
+    following_id INT,
+    followed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (follower_id) REFERENCES listeners(id_listener),
+    FOREIGN KEY (following_id) REFERENCES listeners(id_listener)
+    PRIMARY KEY (follower_id, following_id)
+);
+
+CREATE TABLE post(
+    id_post INT PRIMARY KEY AUTO_INCREMENT,
+    id_listener VARCHAR(50) UNIQUE,
+    music LONGTEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_listener) REFERENCES listeners(id_listener)
+);
+
+CREATE TABLE reactions(
+    id_reaction INT PRIMARY KEY AUTO_INCREMENT,
+    id_post INT,
+    id_listener INT,
+    reaction_type ENUM('like', 'love', 'haha', 'wow', 'sad', 'angry', 'cuestion'),
+    reacted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_post) REFERENCES post(id_post),
+    FOREIGN KEY (id_listener) REFERENCES listeners(id_listener)
+);
+
+CREATE TABLE block(
+    bloqueado_id INT,
+    bloqueador_id INT,
+    blocked_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (bloqueado_id) REFERENCES listeners(id_listener),
+    FOREIGN KEY (bloqueador_id) REFERENCES listeners(id_listener)
+)
